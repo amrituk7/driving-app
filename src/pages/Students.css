@@ -1,0 +1,25 @@
+.student-list {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 0;
+  list-style: none;
+}
+
+.student-card {
+  background: #ffffff;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.student-card strong {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.student-card em {
+  color: #555;
+  font-size: 14px;
+}
