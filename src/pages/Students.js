@@ -1,49 +1,34 @@
-import { useEffect, useState } from "react"
-import { collection, onSnapshot } from "firebase/firestore"
-import { db } from "../firebase"
+import React, { useEffect, useState } from "react";
+import { getStudents } from "../firebase";
+import { Link } from "react-router-dom";
+import "./Students.css";
 
-function Students() {
-  const [students, setStudents] = useState([])
+export default function Students() {
+  const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(db, "roadmaster"),
-      (snapshot) => {
-        const list = snapshot.docs.map((doc) => {
-          const data = doc.data()
-          console.log("Student:", data) // Debug each student
-          return {
-            id: doc.id,
-            ...data
-          }
-        })
-        setStudents(list)
-      },
-      (error) => {
-        console.error("Firestore error:", error)
-      }
-    )
-
-    return () => unsubscribe()
-  }, [])
+    async function load() {
+      const data = await getStudents();
+      setStudents(data);
+    }
+    load();
+  }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Student List</h2>
+    <div className="students-page">
+      <h1>Students</h1>
 
-      {students.length === 0 ? (
-        <p>No students found.</p>
-      ) : (
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              {student.name ? student.name : "Unnamed"} — {student.phone} — {student.notes}
-            </li>
-          ))}
-        </ul>
-      )}
+      {students.length === 0 && <p>No students found.</p>}
+
+      <div className="students-list">
+        {students.map((s) => (
+          <Link key={s.id} to={`/students/${s.id}`} className="student-card">
+            <h3>{s.name}</h3>
+            <p>{s.phone}</p>
+            <p>{s.transmission || "N/A"} transmission</p>
+          </Link>
+        ))}
+      </div>
     </div>
-  )
+  );
 }
-
-export default Students

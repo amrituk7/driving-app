@@ -1,25 +1,56 @@
-.student-list {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 0;
-  list-style: none;
+.students-container {
+  padding: 20px;
+}
+
+.add-btn {
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.students-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .student-card {
-  background: #ffffff;
-  padding: 16px;
-  margin-bottom: 12px;
+  background: #f9f9f9;
+  padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 250px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-.student-card strong {
-  font-size: 18px;
-  display: block;
-  margin-bottom: 4px;
+.actions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.student-card em {
-  color: #555;
-  font-size: 14px;
+.actions button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions button:first-child {
+  background-color: #ffc107;
+  color: black;
+}
+
+.actions button:nth-child(2) {
+  background-color: #dc3545;
+  color: white;
+}
+
+.actions a {
+  color: #007bff;
+  text-decoration: none;
 }

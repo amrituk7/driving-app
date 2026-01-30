@@ -1,0 +1,56 @@
+.notif-panel {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 350px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+  transition: right 0.3s ease;
+  padding: 1rem;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.notif-panel.open {
+  right: 0;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.notif-item {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.notif-item.unread {
+  background: #eef6ff;
+}
+
+.notif-item.read {
+  background: #fff;
+}
+
+.time {
+  font-size: 12px;
+  color: #666;
+}
+
+.empty {
+  text-align: center;
+  color: #777;
+  margin-top: 2rem;
+}
