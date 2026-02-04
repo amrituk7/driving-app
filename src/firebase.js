@@ -258,3 +258,62 @@ export const deleteTip = async (id) => {
   const docRef = doc(db, "tips", id);
   await deleteDoc(docRef);
 };
+
+//
+// SUBSCRIPTIONS
+//
+export const createSubscription = async (userId, tier) => {
+  const docRef = await addDoc(collection(db, "subscriptions"), {
+    userId,
+    tier,
+    startDate: Date.now(),
+    endDate: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
+    status: "active",
+    autoRenew: true
+  });
+  return docRef.id;
+};
+
+export const getUserSubscription = async (userId) => {
+  const q = query(
+    collection(db, "subscriptions"),
+    where("userId", "==", userId),
+    where("status", "==", "active")
+  );
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  const sub = snapshot.docs[0];
+  return { id: sub.id, ...sub.data() };
+};
+
+export const cancelSubscription = async (subscriptionId) => {
+  const docRef = doc(db, "subscriptions", subscriptionId);
+  await updateDoc(docRef, { status: "cancelled" });
+};
+
+//
+// COMMUNITY POSTS
+//
+export const createCommunityPost = async (postData) => {
+  const docRef = await addDoc(collection(db, "community-posts"), {
+    ...postData,
+    timestamp: Date.now(),
+    likes: 0,
+    comments: 0
+  });
+  return docRef.id;
+};
+
+export const getCommunityPosts = async (community) => {
+  const q = query(
+    collection(db, "community-posts"),
+    where("community", "==", community)
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const deleteCommunityPost = async (postId) => {
+  const docRef = doc(db, "community-posts", postId);
+  await deleteDoc(docRef);
+};

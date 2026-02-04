@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSubscription } from "../context/SubscriptionContext";
+import { useNavigate } from "react-router-dom";
+import Paywall from "../components/Paywall";
 
 // Levels configuration
 const LEVELS = [
-  { name: "Baby Banana", minXP: 0, maxXP: 100, color: "#fef3c7", emoji: "🍌" },
-  { name: "Mini Banana", minXP: 100, maxXP: 300, color: "#fde68a", emoji: "🍌🍌" },
-  { name: "Smart Banana", minXP: 300, maxXP: 600, color: "#fcd34d", emoji: "🎓🍌" },
-  { name: "Driving Banana", minXP: 600, maxXP: 1000, color: "#fbbf24", emoji: "🚗🍌" },
-  { name: "Golden Banana", minXP: 1000, maxXP: 9999, color: "#f59e0b", emoji: "👑🍌" },
+  { name: "Learner", minXP: 0, maxXP: 100, color: "#dbeafe" },
+  { name: "Intermediate", minXP: 100, maxXP: 300, color: "#bfdbfe" },
+  { name: "Advanced", minXP: 300, maxXP: 600, color: "#7dd3fc" },
+  { name: "Expert", minXP: 600, maxXP: 1000, color: "#38bdf8" },
+  { name: "Master", minXP: 1000, maxXP: 9999, color: "#0284c7" },
 ];
 
 // Daily challenges data
@@ -44,6 +47,19 @@ const PARKING_REFERENCES = [
 ];
 
 export default function PlayAndLearn() {
+  const { hasRoadMasterPlus } = useSubscription();
+  const navigate = useNavigate();
+
+  if (!hasRoadMasterPlus) {
+    return (
+      <Paywall
+        feature="Second Before Hazard Anticipation Game"
+        tier="student"
+        onSubscribe={() => navigate("/subscribe")}
+      />
+    );
+  }
+
   // XP and Level state
   const [xp, setXP] = useState(() => {
     const saved = localStorage.getItem("bananaXP");

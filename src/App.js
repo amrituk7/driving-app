@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { ToastProvider } from "./context/ToastContext";
 import { AuthProvider } from "./context/AuthContext";
+import { SubscriptionProvider } from "./context/SubscriptionContext";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -23,6 +24,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import StudentDashboard from "./pages/StudentDashboard";
 import PlayAndLearn from "./pages/PlayAndLearn";
+import StudentCommunity from "./pages/StudentCommunity";
+import InstructorCommunity from "./pages/InstructorCommunity";
+import Subscribe from "./pages/Subscribe";
 
 import "./App.css";
 
@@ -30,8 +34,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <ToastProvider>
-          <Sidebar />
+        <SubscriptionProvider>
+          <ToastProvider>
+            <Sidebar />
 
         <div style={{ marginLeft: "240px", padding: "20px" }}>
           <Routes>
@@ -67,9 +72,17 @@ function App() {
 
             {/* Play & Learn */}
             <Route path="/play-and-learn" element={<PlayAndLearn />} />
+
+            {/* Community */}
+            <Route path="/student-community" element={<StudentCommunity />} />
+            <Route path="/instructor-community" element={<InstructorCommunity />} />
+
+            {/* Subscription */}
+            <Route path="/subscribe" element={<Subscribe />} />
           </Routes>
           </div>
         </ToastProvider>
+        </SubscriptionProvider>
       </AuthProvider>
     </Router>
   );

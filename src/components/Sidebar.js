@@ -1,8 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Sidebar.css";
 
 export default function Sidebar() {
   const location = useLocation();
+  const auth = useAuth() || {};
+  const { user } = auth;
 
   const links = [
     { to: "/", label: "Dashboard", icon: "H" },
@@ -16,6 +19,15 @@ export default function Sidebar() {
     { to: "/resources", label: "DVLA Resources", icon: "R" },
     { to: "/notifications", label: "Notifications", icon: "B" },
   ];
+
+  const communityLinks = user ? [
+    ...(user?.role === "student" ? [
+      { to: "/student-community", label: "Student Community", icon: "👥" }
+    ] : []),
+    ...(user?.role === "instructor" ? [
+      { to: "/instructor-community", label: "Instructor Community", icon: "🏢" }
+    ] : [])
+  ] : [];
 
   return (
     <div className="sidebar">
@@ -32,6 +44,25 @@ export default function Sidebar() {
             {link.label}
           </Link>
         ))}
+
+        {communityLinks.length > 0 && (
+          <>
+            <hr style={{ margin: "15px 0", border: "none", borderTop: "1px solid #e5e7eb" }} />
+            <div style={{ padding: "10px 0", fontSize: "11px", fontWeight: "600", color: "#999", textTransform: "uppercase", paddingLeft: "15px", marginBottom: "10px" }}>
+              Community
+            </div>
+            {communityLinks.map((link) => (
+              <Link 
+                key={link.to}
+                to={link.to} 
+                className={location.pathname === link.to ? "active" : ""}
+              >
+                <span className="nav-icon">{link.icon}</span>
+                {link.label}
+              </Link>
+            ))}
+          </>
+        )}
       </nav>
     </div>
   );
