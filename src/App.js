@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import { ToastProvider } from "./context/ToastContext";
 import { AuthProvider } from "./context/AuthContext";
@@ -36,7 +35,6 @@ function App() {
           <Sidebar />
 
           <div style={{ marginLeft: "240px", padding: "20px" }}>
-            <AnimatePresence mode="wait">
               <Routes>
 
                 {/* Auth Routes */}
@@ -68,7 +66,6 @@ function App() {
                 <Route path="/student-dashboard" element={<StudentDashboard />} />
 
               </Routes>
-            </AnimatePresence>
           </div>
         </ToastProvider>
       </AuthProvider>

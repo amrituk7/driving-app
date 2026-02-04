@@ -64,8 +64,6 @@ export function AuthProvider({ children }) {
     isAuthenticated: !!user
   };
 
-  console.log("[v0] AuthContext - loading:", loading, "user:", !!user);
-  
   return (
     <AuthContext.Provider value={value}>
       {children}
