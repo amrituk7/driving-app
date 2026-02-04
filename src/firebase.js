@@ -166,6 +166,17 @@ export const getLessonsForStudent = async (studentId) => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getLesson = async (id) => {
+  const docRef = doc(db, "lessons", id);
+  const snapshot = await getDoc(docRef);
+  return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
+};
+
+export const updateLesson = async (id, data) => {
+  const docRef = doc(db, "lessons", id);
+  await updateDoc(docRef, data);
+};
+
 export const deleteLesson = async (id) => {
   const docRef = doc(db, "lessons", id);
   await deleteDoc(docRef);
@@ -205,6 +216,15 @@ export const sendNotification = async (notification) => {
 
 export const getNotifications = async () => {
   const snapshot = await getDocs(collection(db, "notifications"));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getNotificationsForStudent = async (studentId) => {
+  const q = query(
+    collection(db, "notifications"),
+    where("studentId", "==", studentId)
+  );
+  const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 

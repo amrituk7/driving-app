@@ -17,6 +17,10 @@ import NotificationCenter from "./pages/NotificationCenter";
 import Resources from "./pages/Resources";
 import Tips from "./pages/Tips";
 import ImportantNotes from "./pages/ImportantNotes";
+import Calendar from "./pages/Calendar";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import StudentDashboard from "./pages/StudentDashboard";
 
 import "./App.css";
 
@@ -49,6 +53,14 @@ function App() {
 
             {/* Notifications */}
             <Route path="/notifications" element={<NotificationCenter />} />
+
+            {/* Calendar */}
+            <Route path="/calendar" element={<Calendar />} />
+
+            {/* Auth */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/student-dashboard" element={<StudentDashboard />} />
           </Routes>
         </div>
       </ToastProvider>
