@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getStudent, updateStudent, sendNotification } from "../firebase";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import ProfilePicture from "../components/ProfilePicture";
 
 export default function EditStudent() {
   const { id } = useParams();
@@ -69,6 +70,10 @@ export default function EditStudent() {
     }
   }
 
+  function handleProfilePictureUpdate(url) {
+    setStudent(prev => ({ ...prev, profilePicture: url }));
+  }
+
   if (loading) return <p>Loading...</p>;
   if (!student) return <p>Student not found</p>;
 
@@ -78,9 +83,20 @@ export default function EditStudent() {
         <button type="button" style={{ marginBottom: "20px" }}>Back to Profile</button>
       </Link>
 
-      <form onSubmit={handleSubmit}>
-        <h1>Edit Student</h1>
+      <h1>Edit Student</h1>
 
+      <div style={{ marginBottom: "30px" }}>
+        <ProfilePicture
+          studentId={student.id}
+          studentName={student.name}
+          profilePicture={student.profilePicture}
+          editable={true}
+          size="large"
+          onUpdate={handleProfilePictureUpdate}
+        />
+      </div>
+
+      <form onSubmit={handleSubmit}>
         <input
           placeholder="Name"
           value={student.name || ""}

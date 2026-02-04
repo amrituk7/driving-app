@@ -1,7 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import { ToastProvider } from "./context/ToastContext";
+import { AuthProvider } from "./context/AuthContext";
 
+// Auth Pages
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+// Instructor Pages
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import AddStudent from "./pages/AddStudent";
@@ -13,36 +20,58 @@ import LessonDetails from "./pages/LessonDetails";
 import BookLesson from "./pages/BookLesson";
 
 import NotificationCenter from "./pages/NotificationCenter";
+import Resources from "./pages/Resources";
+import Tips from "./pages/Tips";
+
+// Student Pages
+import StudentDashboard from "./pages/StudentDashboard";
+
+import "./App.css";
 
 function App() {
   return (
     <Router>
-      <ToastProvider>
-        <Sidebar />
+      <AuthProvider>
+        <ToastProvider>
+          <Sidebar />
 
-        <div style={{ marginLeft: "240px", padding: "20px" }}>
-          <Routes>
+          <div style={{ marginLeft: "240px", padding: "20px" }}>
+            <AnimatePresence mode="wait">
+              <Routes>
 
-            {/* Dashboard */}
-            <Route path="/" element={<Dashboard />} />
+                {/* Auth Routes */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-            {/* Students */}
-            <Route path="/students" element={<Students />} />
-            <Route path="/students/add" element={<AddStudent />} />
-            <Route path="/students/edit/:id" element={<EditStudent />} />
-            <Route path="/students/:id" element={<StudentProfile />} />
+                {/* Instructor Dashboard */}
+                <Route path="/" element={<Dashboard />} />
 
-            {/* Lessons */}
-            <Route path="/lessons" element={<Lessons />} />
-            <Route path="/lessons/:id" element={<LessonDetails />} />
-            <Route path="/book-lesson" element={<BookLesson />} />
+                {/* Students */}
+                <Route path="/students" element={<Students />} />
+                <Route path="/students/add" element={<AddStudent />} />
+                <Route path="/students/edit/:id" element={<EditStudent />} />
+                <Route path="/students/:id" element={<StudentProfile />} />
 
-            {/* Notifications */}
-            <Route path="/notifications" element={<NotificationCenter />} />
+                {/* Lessons */}
+                <Route path="/lessons" element={<Lessons />} />
+                <Route path="/lessons/:id" element={<LessonDetails />} />
+                <Route path="/book-lesson" element={<BookLesson />} />
 
-          </Routes>
-        </div>
-      </ToastProvider>
+                {/* Resources & Tips */}
+                <Route path="/resources" element={<Resources />} />
+                <Route path="/tips" element={<Tips />} />
+
+                {/* Notifications */}
+                <Route path="/notifications" element={<NotificationCenter />} />
+
+                {/* Student Dashboard */}
+                <Route path="/student-dashboard" element={<StudentDashboard />} />
+
+              </Routes>
+            </AnimatePresence>
+          </div>
+        </ToastProvider>
+      </AuthProvider>
     </Router>
   );
 }

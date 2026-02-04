@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getStudent, sendMessage, getMessagesForStudent, deleteStudent } from "../firebase";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import ProfilePicture from "../components/ProfilePicture";
 
 export default function StudentProfile() {
   const { id } = useParams();
@@ -76,6 +77,10 @@ export default function StudentProfile() {
     }
   }
 
+  function handleProfilePictureUpdate(url) {
+    setStudent(prev => ({ ...prev, profilePicture: url }));
+  }
+
   if (loading) return <p>Loading...</p>;
   if (!student) return <p>Student not found</p>;
 
@@ -85,19 +90,34 @@ export default function StudentProfile() {
         <button type="button" style={{ marginBottom: "20px" }}>Back to Students</button>
       </Link>
 
-      <h1>{student.name || "Unnamed Student"}</h1>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "30px", marginBottom: "20px" }}>
+        <ProfilePicture
+          studentId={student.id}
+          studentName={student.name}
+          profilePicture={student.profilePicture}
+          editable={true}
+          size="large"
+          onUpdate={handleProfilePictureUpdate}
+        />
 
-      <p><strong>Phone:</strong> {student.phone || "N/A"}</p>
-      <p><strong>Transmission:</strong> {student.transmission || "N/A"}</p>
-      <p><strong>Perfect Driver:</strong> {student.perfectDriver ? "Yes" : "No"}</p>
-      <p><strong>Parking Practice:</strong> {student.parkingPractice ? "Yes" : "No"}</p>
+        <div>
+          <h1 style={{ marginTop: 0 }}>{student.name || "Unnamed Student"}</h1>
+          <p><strong>Phone:</strong> {student.phone || "N/A"}</p>
+          <p><strong>Transmission:</strong> {student.transmission || "N/A"}</p>
+          <p><strong>Perfect Driver:</strong> {student.perfectDriver ? "Yes" : "No"}</p>
+          <p><strong>Parking Practice:</strong> {student.parkingPractice ? "Yes" : "No"}</p>
+        </div>
+      </div>
 
-      <div style={{ display: "flex", gap: "10px", marginTop: "15px", marginBottom: "20px" }}>
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         <Link to={`/students/edit/${student.id}`}>
           <button>Edit Student</button>
         </Link>
         <Link to={`/lessons?studentId=${student.id}`}>
           <button>View Lessons</button>
+        </Link>
+        <Link to={`/book-lesson?studentId=${student.id}`}>
+          <button style={{ background: "#10b981" }}>Book Lesson</button>
         </Link>
         <button onClick={handleDelete} style={{ background: "#ef4444" }}>
           Delete Student
