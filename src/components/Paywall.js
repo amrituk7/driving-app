@@ -5,16 +5,16 @@ import { useNavigate } from "react-router-dom";
 const plans = {
   student: {
     name: "RoadMaster+",
-    price: "£3.29",
+    price: "£3.59",
     period: "/month",
     description: "Premium features for learning drivers",
     benefits: [
+      "Play & Learn Pro",
       "Second Before hazard anticipation game",
-      "Ravi's Tips & Expert Guidance",
-      "Important Notes & Driving Guides",
-      "Student Community Chat & Posts",
-      "Connect with Local Learners",
-      "Integration with Reddit & X Communities"
+      "Ravi's Tips",
+      "Important Notes",
+      "DVLA Resources",
+      "Student Community"
     ],
     color: "#3b82f6",
     tier: "student"

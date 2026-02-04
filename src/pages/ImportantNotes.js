@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSubscription } from "../context/SubscriptionContext";
+import Paywall from "../components/Paywall";
 
 const notesData = [
   {
@@ -205,8 +207,19 @@ function AccordionItem({ item, isOpen, onToggle }) {
 
 export default function ImportantNotes() {
   const navigate = useNavigate();
+  const { hasRoadMasterPlus } = useSubscription();
   const [openItems, setOpenItems] = useState([1]); // First item open by default
 
+  if (!hasRoadMasterPlus) {
+    return (
+      <Paywall
+        feature="Important Notes"
+        tier="student"
+        onSubscribe={() => navigate("/subscribe")}
+      />
+    );
+  }
+  
   const toggleItem = (id) => {
     setOpenItems(prev => 
       prev.includes(id) 

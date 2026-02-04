@@ -1,11 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useSubscription } from "../context/SubscriptionContext";
 import "./Sidebar.css";
 
 export default function Sidebar() {
   const location = useLocation();
   const auth = useAuth() || {};
   const { user } = auth;
+  const { hasRoadMasterPlus } = useSubscription();
 
   const links = [
     { to: "/", label: "Dashboard", icon: "H" },
@@ -13,10 +15,10 @@ export default function Sidebar() {
     { to: "/lessons", label: "Lessons", icon: "L" },
     { to: "/calendar", label: "Calendar", icon: "C" },
     { to: "/book-lesson", label: "Book Lesson", icon: "+" },
-    { to: "/play-and-learn", label: "Play & Learn", icon: "G" },
-    { to: "/important-notes", label: "Important Notes", icon: "N" },
-    { to: "/tips", label: "Ravi's Tips", icon: "T" },
-    { to: "/resources", label: "DVLA Resources", icon: "R" },
+    { to: "/play-and-learn", label: "Play & Learn", icon: "G", premium: true },
+    { to: "/important-notes", label: "Important Notes", icon: "N", premium: true },
+    { to: "/tips", label: "Ravi's Tips", icon: "T", premium: true },
+    { to: "/resources", label: "DVLA Resources", icon: "R", premium: true },
     { to: "/notifications", label: "Notifications", icon: "B" },
   ];
 
@@ -40,9 +42,25 @@ export default function Sidebar() {
             key={link.to}
             to={link.to} 
             className={location.pathname === link.to ? "active" : ""}
+            style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
           >
-            <span className="nav-icon">{link.icon}</span>
-            {link.label}
+            <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <span className="nav-icon">{link.icon}</span>
+              {link.label}
+            </span>
+            {link.premium && !hasRoadMasterPlus && (
+              <span style={{
+                fontSize: "9px",
+                fontWeight: "600",
+                background: "linear-gradient(135deg, #f59e0b, #f97316)",
+                color: "white",
+                padding: "2px 6px",
+                borderRadius: "4px",
+                textTransform: "uppercase"
+              }}>
+                PRO
+              </span>
+            )}
           </Link>
         ))}
 

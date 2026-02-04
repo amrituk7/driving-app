@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getTips, addTip, deleteTip } from "../firebase";
 import { useToast } from "../context/ToastContext";
 import { useAuth } from "../context/AuthContext";
+import { useSubscription } from "../context/SubscriptionContext";
+import Paywall from "../components/Paywall";
 import "./Tips.css";
 
 const instructorCoreTips = [
@@ -38,10 +40,22 @@ export default function Tips() {
   const { showToast } = useToast();
   const auth = useAuth() || {};
   const isInstructor = auth.isInstructor || false;
+  const { hasRoadMasterPlus } = useSubscription();
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadTips();
   }, []);
+
+  if (!hasRoadMasterPlus && !isInstructor) {
+    return (
+      <Paywall
+        feature="Ravi's Tips"
+        tier="student"
+        onSubscribe={() => navigate("/subscribe")}
+      />
+    );
+  }
 
   async function loadTips() {
     try {
