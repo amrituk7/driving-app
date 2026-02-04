@@ -16,6 +16,7 @@ import BookLesson from "./pages/BookLesson";
 import NotificationCenter from "./pages/NotificationCenter";
 import Resources from "./pages/Resources";
 import Tips from "./pages/Tips";
+import ImportantNotes from "./pages/ImportantNotes";
 
 import "./App.css";
 
@@ -44,6 +45,7 @@ function App() {
             {/* Resources & Tips */}
             <Route path="/resources" element={<Resources />} />
             <Route path="/tips" element={<Tips />} />
+            <Route path="/important-notes" element={<ImportantNotes />} />
 
             {/* Notifications */}
             <Route path="/notifications" element={<NotificationCenter />} />

@@ -9,9 +9,10 @@ export default function Sidebar() {
     { to: "/students", label: "Students", icon: "S" },
     { to: "/lessons", label: "Lessons", icon: "L" },
     { to: "/book-lesson", label: "Book Lesson", icon: "+" },
+    { to: "/important-notes", label: "Important Notes", icon: "N" },
     { to: "/tips", label: "Ravi's Tips", icon: "T" },
     { to: "/resources", label: "DVLA Resources", icon: "R" },
-    { to: "/notifications", label: "Notifications", icon: "N" },
+    { to: "/notifications", label: "Notifications", icon: "B" },
   ];
 
   return (
