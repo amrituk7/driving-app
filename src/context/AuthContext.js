@@ -13,23 +13,30 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthChange(async (firebaseUser) => {
-      setUser(firebaseUser);
-      
-      if (firebaseUser) {
-        try {
-          const profile = await getUserProfile(firebaseUser.uid);
-          setUserProfile(profile);
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
+    let unsubscribe = () => {};
+    
+    try {
+      unsubscribe = onAuthChange(async (firebaseUser) => {
+        setUser(firebaseUser);
+        
+        if (firebaseUser) {
+          try {
+            const profile = await getUserProfile(firebaseUser.uid);
+            setUserProfile(profile);
+          } catch (error) {
+            console.error("Error fetching user profile:", error);
+            setUserProfile(null);
+          }
+        } else {
           setUserProfile(null);
         }
-      } else {
-        setUserProfile(null);
-      }
-      
+        
+        setLoading(false);
+      });
+    } catch (error) {
+      console.error("Error setting up auth listener:", error);
       setLoading(false);
-    });
+    }
 
     return () => unsubscribe();
   }, []);
