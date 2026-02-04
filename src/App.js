@@ -22,6 +22,7 @@ import Calendar from "./pages/Calendar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import StudentDashboard from "./pages/StudentDashboard";
+import PlayAndLearn from "./pages/PlayAndLearn";
 
 import "./App.css";
 
@@ -63,6 +64,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/student-dashboard" element={<StudentDashboard />} />
+
+            {/* Play & Learn */}
+            <Route path="/play-and-learn" element={<PlayAndLearn />} />
           </Routes>
           </div>
         </ToastProvider>
