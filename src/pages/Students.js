@@ -129,20 +129,7 @@ const styles = {
     color: "white",
     objectFit: "cover",
   },
-  bananaHint: {
-    position: "absolute",
-    bottom: "-4px",
-    right: "-4px",
-    width: "24px",
-    height: "24px",
-    background: "white",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "14px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-  },
+  
   info: {
     flex: 1,
     minWidth: 0,
@@ -244,7 +231,6 @@ const styles = {
 export default function Students() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [hoveredId, setHoveredId] = useState(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -382,8 +368,6 @@ export default function Students() {
                     boxShadow: "0 8px 30px rgba(0, 0, 0, 0.12)",
                     y: -4
                   }}
-                  onHoverStart={() => setHoveredId(student.id)}
-                  onHoverEnd={() => setHoveredId(null)}
                   onClick={() => navigate(`/students/${student.id}`)}
                 >
                   {/* Avatar */}
@@ -399,20 +383,6 @@ export default function Students() {
                         {getInitials(student.name)}
                       </div>
                     )}
-                    {/* Banana micro-animation placeholder */}
-                    <AnimatePresence>
-                      {hoveredId === student.id && (
-                        <motion.div
-                          style={styles.bananaHint}
-                          initial={{ scale: 0, rotate: -45 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          exit={{ scale: 0, rotate: 45 }}
-                          transition={{ type: "spring", stiffness: 500, damping: 20 }}
-                        >
-                          <span role="img" aria-label="banana">&#127820;</span>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
                   </div>
 
                   {/* Info */}
