@@ -5,7 +5,8 @@ import "./Sidebar.css";
 
 export default function Sidebar() {
   const location = useLocation();
-  const { user, userProfile, logout, isInstructor, isStudent } = useAuth();
+  const auth = useAuth() || {};
+  const { user = null, userProfile = null, logout = () => {}, isInstructor = false, isStudent = false } = auth;
 
   const instructorLinks = [
     { to: "/", label: "Dashboard", icon: "home" },
@@ -28,6 +29,8 @@ export default function Sidebar() {
     { to: "/register", label: "Register", icon: "user-plus" },
   ];
 
+  console.log("[v0] Sidebar rendering - user:", !!user, "isInstructor:", isInstructor);
+  
   const links = user 
     ? (isInstructor ? instructorLinks : studentLinks)
     : publicLinks;
