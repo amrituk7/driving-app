@@ -1,7 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSubscription } from "../context/SubscriptionContext";
-import Paywall from "../components/Paywall";
+import { Link } from "react-router-dom";
 import "./Resources.css";
 
 const dvlaResources = [
@@ -89,21 +87,8 @@ function ResourceIcon({ type }) {
 }
 
 export default function Resources() {
-  const { hasRoadMasterPlus } = useSubscription();
-  const navigate = useNavigate();
-
-  if (!hasRoadMasterPlus) {
-    return (
-      <Paywall
-        feature="DVLA Resources"
-        tier="student"
-        onSubscribe={() => navigate("/subscribe")}
-      />
-    );
-  }
-
   return (
-  <div className="resources-page">
+    <div className="resources-page">
       <Link to="/">
         <button type="button" className="back-btn">Back to Dashboard</button>
       </Link>

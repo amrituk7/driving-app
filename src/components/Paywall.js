@@ -13,7 +13,6 @@ const plans = {
       "Second Before hazard anticipation game",
       "Ravi's Tips",
       "Important Notes",
-      "DVLA Resources",
       "Student Community"
     ],
     color: "#3b82f6",

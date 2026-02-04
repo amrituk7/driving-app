@@ -18,7 +18,7 @@ export default function Sidebar() {
     { to: "/play-and-learn", label: "Play & Learn", icon: "G", premium: true },
     { to: "/important-notes", label: "Important Notes", icon: "N", premium: true },
     { to: "/tips", label: "Ravi's Tips", icon: "T", premium: true },
-    { to: "/resources", label: "DVLA Resources", icon: "R", premium: true },
+    { to: "/resources", label: "DVLA Resources", icon: "R" },
     { to: "/notifications", label: "Notifications", icon: "B" },
   ];
 
