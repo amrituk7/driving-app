@@ -1,13 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { ToastProvider } from "./context/ToastContext";
-import { AuthProvider } from "./context/AuthContext";
 
-// Auth Pages
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-
-// Instructor Pages
+// Pages
 import Dashboard from "./pages/Dashboard";
 import Students from "./pages/Students";
 import AddStudent from "./pages/AddStudent";
@@ -22,53 +17,39 @@ import NotificationCenter from "./pages/NotificationCenter";
 import Resources from "./pages/Resources";
 import Tips from "./pages/Tips";
 
-// Student Pages
-import StudentDashboard from "./pages/StudentDashboard";
-
 import "./App.css";
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <ToastProvider>
-          <Sidebar />
+      <ToastProvider>
+        <Sidebar />
 
-          <div style={{ marginLeft: "240px", padding: "20px" }}>
-              <Routes>
+        <div style={{ marginLeft: "240px", padding: "20px" }}>
+          <Routes>
+            {/* Dashboard */}
+            <Route path="/" element={<Dashboard />} />
 
-                {/* Auth Routes */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+            {/* Students */}
+            <Route path="/students" element={<Students />} />
+            <Route path="/students/add" element={<AddStudent />} />
+            <Route path="/students/edit/:id" element={<EditStudent />} />
+            <Route path="/students/:id" element={<StudentProfile />} />
 
-                {/* Instructor Dashboard */}
-                <Route path="/" element={<Dashboard />} />
+            {/* Lessons */}
+            <Route path="/lessons" element={<Lessons />} />
+            <Route path="/lessons/:id" element={<LessonDetails />} />
+            <Route path="/book-lesson" element={<BookLesson />} />
 
-                {/* Students */}
-                <Route path="/students" element={<Students />} />
-                <Route path="/students/add" element={<AddStudent />} />
-                <Route path="/students/edit/:id" element={<EditStudent />} />
-                <Route path="/students/:id" element={<StudentProfile />} />
+            {/* Resources & Tips */}
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/tips" element={<Tips />} />
 
-                {/* Lessons */}
-                <Route path="/lessons" element={<Lessons />} />
-                <Route path="/lessons/:id" element={<LessonDetails />} />
-                <Route path="/book-lesson" element={<BookLesson />} />
-
-                {/* Resources & Tips */}
-                <Route path="/resources" element={<Resources />} />
-                <Route path="/tips" element={<Tips />} />
-
-                {/* Notifications */}
-                <Route path="/notifications" element={<NotificationCenter />} />
-
-                {/* Student Dashboard */}
-                <Route path="/student-dashboard" element={<StudentDashboard />} />
-
-              </Routes>
-          </div>
-        </ToastProvider>
-      </AuthProvider>
+            {/* Notifications */}
+            <Route path="/notifications" element={<NotificationCenter />} />
+          </Routes>
+        </div>
+      </ToastProvider>
     </Router>
   );
 }
