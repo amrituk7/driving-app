@@ -36,7 +36,8 @@ export default function Tips() {
   const [newTip, setNewTip] = useState({ title: "", content: "", type: "text", videoUrl: "" });
   const [saving, setSaving] = useState(false);
   const { showToast } = useToast();
-  const { isInstructor } = useAuth();
+  const auth = useAuth() || {};
+  const isInstructor = auth.isInstructor || false;
 
   useEffect(() => {
     loadTips();

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { ToastProvider } from "./context/ToastContext";
+import { AuthProvider } from "./context/AuthContext";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -27,8 +28,9 @@ import "./App.css";
 function App() {
   return (
     <Router>
-      <ToastProvider>
-        <Sidebar />
+      <AuthProvider>
+        <ToastProvider>
+          <Sidebar />
 
         <div style={{ marginLeft: "240px", padding: "20px" }}>
           <Routes>
@@ -62,8 +64,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/student-dashboard" element={<StudentDashboard />} />
           </Routes>
-        </div>
-      </ToastProvider>
+          </div>
+        </ToastProvider>
+      </AuthProvider>
     </Router>
   );
 }
