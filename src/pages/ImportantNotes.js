@@ -2,29 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-const instructorTips = [
-  {
-    id: "tip1",
-    title: "Take responsibility for your driving",
-    content: "Driving is your space. Own every decision you make on the road. Stay aware, stay calm, and stay in control."
-  },
-  {
-    id: "tip2",
-    title: "Check your perfection at the door",
-    content: "Perfect driving doesn't exist. Safe, smooth, predictable driving is what examiners want."
-  },
-  {
-    id: "tip3",
-    title: "Stay ahead of the car",
-    content: "Look further down the road than you think you need to. Anticipation is the secret to confident driving."
-  },
-  {
-    id: "tip4",
-    title: "Smoothness is your superpower",
-    content: "Smooth clutch, smooth steering, smooth braking. Smooth = safe."
-  }
-];
-
 const notesData = [
   {
     id: 1,
@@ -311,47 +288,6 @@ export default function ImportantNotes() {
           >
             Collapse All
           </button>
-        </div>
-      </motion.div>
-
-      {/* Instructor Notes (Ravi's Tips) */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        style={{
-          background: "linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)",
-          borderRadius: "16px",
-          padding: "30px",
-          marginBottom: "30px",
-          color: "white"
-        }}
-      >
-        <h2 style={{ fontSize: "24px", fontWeight: "700", marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontSize: "28px" }}>&#128161;</span> Instructor Notes (Ravi's Tips)
-        </h2>
-        <div style={{ display: "grid", gap: "15px" }}>
-          {instructorTips.map((tip, index) => (
-            <motion.div
-              key={tip.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.02, x: 5 }}
-              style={{
-                background: "rgba(255,255,255,0.15)",
-                borderRadius: "12px",
-                padding: "20px",
-                backdropFilter: "blur(10px)"
-              }}
-            >
-              <h3 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "8px" }}>
-                {index + 1}. {tip.title}
-              </h3>
-              <p style={{ fontSize: "15px", opacity: 0.9, lineHeight: "1.6" }}>
-                {tip.content}
-              </p>
-            </motion.div>
-          ))}
         </div>
       </motion.div>
 
