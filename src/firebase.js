@@ -319,10 +319,10 @@ export const deleteCommunityPost = async (postId) => {
 };
 
 //
-// MESSAGING
+// DIRECT MESSAGING (Community DMs)
 //
-export const sendMessage = async (senderId, recipientId, content) => {
-  const docRef = await addDoc(collection(db, "messages"), {
+export const sendDirectMessage = async (senderId, recipientId, content) => {
+  const docRef = await addDoc(collection(db, "direct-messages"), {
     senderId,
     recipientId,
     content,
@@ -332,9 +332,9 @@ export const sendMessage = async (senderId, recipientId, content) => {
   return docRef.id;
 };
 
-export const getMessages = async (userId1, userId2) => {
+export const getDirectMessages = async (userId1, userId2) => {
   const q = query(
-    collection(db, "messages"),
+    collection(db, "direct-messages"),
     where("senderId", "in", [userId1, userId2])
   );
   const snapshot = await getDocs(q);
@@ -347,7 +347,7 @@ export const getMessages = async (userId1, userId2) => {
 
 export const getConversations = async (userId) => {
   const q = query(
-    collection(db, "messages"),
+    collection(db, "direct-messages"),
     where("senderId", "==", userId)
   );
   const snapshot = await getDocs(q);
