@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getStudents, sendMessage, getMessagesForStudent } from "../firebase";
+import { getStudent, sendMessage, getMessagesForStudent } from "../firebase";
 import { useParams, Link } from "react-router-dom";
 
 export default function StudentProfile() {
@@ -10,8 +10,7 @@ export default function StudentProfile() {
 
   useEffect(() => {
     async function load() {
-      const all = await getStudents();
-      const s = all.find(x => x.id === id);
+      const s = await getStudent(id);
       setStudent(s);
 
       const msgs = await getMessagesForStudent(id);

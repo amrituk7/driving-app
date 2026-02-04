@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getStudents, updateStudent, sendNotification } from "../firebase";
+import { getStudent, updateStudent, sendNotification } from "../firebase";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function EditStudent() {
@@ -10,8 +10,7 @@ export default function EditStudent() {
 
   useEffect(() => {
     async function load() {
-      const all = await getStudents();
-      const found = all.find(s => s.id === id);
+      const found = await getStudent(id);
       setStudent(found);
     }
     load();

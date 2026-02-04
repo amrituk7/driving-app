@@ -5,12 +5,19 @@ import "./Lessons.css";
 
 export default function Lessons() {
   const [lessons, setLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
-      const data = await getLessons();
-      setLessons(data.sort((a, b) => b.timestamp - a.timestamp));
+      try {
+        const data = await getLessons();
+        setLessons(data.sort((a, b) => b.timestamp - a.timestamp));
+      } catch (error) {
+        console.error("Error loading lessons:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, []);
@@ -20,10 +27,12 @@ export default function Lessons() {
     setLessons(prev => prev.filter(l => l.id !== id));
   }
 
+  if (loading) return <p>Loading lessons...</p>;
+
   return (
     <div className="lessons-container">
       <h1>Lessons</h1>
-      <button onClick={() => navigate("/lessons/book")}>➕ Book Lesson</button>
+      <button onClick={() => navigate("/book-lesson")}>+ Book Lesson</button>
 
       <div className="lessons-list">
         {lessons.map(lesson => (

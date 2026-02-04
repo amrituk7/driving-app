@@ -9,21 +9,34 @@ export default function BookLesson() {
   const [time, setTime] = useState("");
   const [instructor, setInstructor] = useState("");
   const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
-      const data = await getStudents();
-      setStudents(data);
+      try {
+        const data = await getStudents();
+        setStudents(data);
+      } catch (error) {
+        console.error("Error loading students:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, []);
+
+  if (loading) return <p>Loading students...</p>;
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const student = students.find(s => s.id === studentId);
+    if (!student) {
+      alert("Please select a student");
+      return;
+    }
 
     await addLesson({
       studentId,
