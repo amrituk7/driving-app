@@ -26,6 +26,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import PlayAndLearn from "./pages/PlayAndLearn";
 import StudentCommunity from "./pages/StudentCommunity";
 import InstructorCommunity from "./pages/InstructorCommunity";
+import ExternalCommunities from "./pages/ExternalCommunities";
 import Subscribe from "./pages/Subscribe";
 
 import "./App.css";
@@ -76,6 +77,7 @@ function App() {
             {/* Community */}
             <Route path="/student-community" element={<StudentCommunity />} />
             <Route path="/instructor-community" element={<InstructorCommunity />} />
+            <Route path="/external-communities" element={<ExternalCommunities />} />
 
             {/* Subscription */}
             <Route path="/subscribe" element={<Subscribe />} />

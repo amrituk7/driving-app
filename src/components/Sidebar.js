@@ -26,7 +26,8 @@ export default function Sidebar() {
     ] : []),
     ...(user?.role === "instructor" ? [
       { to: "/instructor-community", label: "Instructor Community", icon: "🏢" }
-    ] : [])
+    ] : []),
+    { to: "/external-communities", label: "External Communities", icon: "🌍" }
   ] : [];
 
   return (

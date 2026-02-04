@@ -317,3 +317,47 @@ export const deleteCommunityPost = async (postId) => {
   const docRef = doc(db, "community-posts", postId);
   await deleteDoc(docRef);
 };
+
+//
+// MESSAGING
+//
+export const sendMessage = async (senderId, recipientId, content) => {
+  const docRef = await addDoc(collection(db, "messages"), {
+    senderId,
+    recipientId,
+    content,
+    timestamp: Date.now(),
+    read: false
+  });
+  return docRef.id;
+};
+
+export const getMessages = async (userId1, userId2) => {
+  const q = query(
+    collection(db, "messages"),
+    where("senderId", "in", [userId1, userId2])
+  );
+  const snapshot = await getDocs(q);
+  const messages = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return messages.filter(
+    (m) => (m.senderId === userId1 && m.recipientId === userId2) || 
+           (m.senderId === userId2 && m.recipientId === userId1)
+  ).sort((a, b) => a.timestamp - b.timestamp);
+};
+
+export const getConversations = async (userId) => {
+  const q = query(
+    collection(db, "messages"),
+    where("senderId", "==", userId)
+  );
+  const snapshot = await getDocs(q);
+  const conversations = new Map();
+  snapshot.docs.forEach((doc) => {
+    const data = doc.data();
+    const key = data.recipientId;
+    if (!conversations.has(key)) {
+      conversations.set(key, { userId: key, lastMessage: data.content, timestamp: data.timestamp });
+    }
+  });
+  return Array.from(conversations.values()).sort((a, b) => b.timestamp - a.timestamp);
+};
