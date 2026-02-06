@@ -9,16 +9,16 @@ const plans = [
   {
     tier: "student",
     name: "RoadMaster+",
-    price: "£3.29",
+    price: "£3.59",
     period: "/month",
     description: "Premium features for learning drivers",
     benefits: [
-      "Second Before hazard anticipation game",
-      "Ravi's Tips & Expert Guidance",
-      "Important Notes & Driving Guides",
-      "Student Community Chat & Posts",
-      "Connect with Local Learners",
-      "Integration with Reddit & X Communities"
+      "Play & Learn Pro - 3 interactive games",
+      "Second Before hazard anticipation trainer",
+      "Spot the Hazard reaction game",
+      "Road Sign Match knowledge quiz",
+      "Mirror Check Trainer",
+      "Track your progress over time"
     ],
     color: "#3b82f6"
   },

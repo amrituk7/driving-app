@@ -189,46 +189,6 @@ export default function Lessons() {
         </div>
       </motion.div>
 
-      {/* Banana Micro-animation Placeholder */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          zIndex: 50
-        }}
-      >
-        <motion.div
-          animate={{ 
-            y: [0, -8, 0],
-            rotate: [0, 5, -5, 0]
-          }}
-          transition={{ 
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          style={{
-            width: "48px",
-            height: "48px",
-            background: "linear-gradient(135deg, #fde047 0%, #facc15 100%)",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 4px 12px rgba(250, 204, 21, 0.4)",
-            cursor: "pointer",
-            fontSize: "24px"
-          }}
-          title="Nano Banana - Coming Soon!"
-        >
-          {/* Banana placeholder icon */}
-          <span role="img" aria-label="banana">&#127820;</span>
-        </motion.div>
-      </motion.div>
-
       {/* Empty State */}
       {lessons.length === 0 && (
         <motion.div

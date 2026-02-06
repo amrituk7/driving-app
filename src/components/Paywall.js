@@ -9,12 +9,12 @@ const plans = {
     period: "/month",
     description: "Premium features for learning drivers",
     benefits: [
-      "Play & Learn Pro",
-      "Second Before hazard anticipation game",
-      "Mirror-Signal-Manoeuvre tap game",
-      "Hazard spotting game",
-      "Parking reference matching game",
-      "Road positioning game"
+      "Play & Learn Pro - 3 interactive games",
+      "Second Before hazard anticipation trainer",
+      "Spot the Hazard reaction game",
+      "Road Sign Match knowledge quiz",
+      "Mirror Check Trainer",
+      "Track your progress over time"
     ],
     color: "#3b82f6",
     tier: "student"

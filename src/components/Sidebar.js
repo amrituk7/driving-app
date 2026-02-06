@@ -22,8 +22,10 @@ export default function Sidebar() {
   ];
 
   const premiumLinks = [
-    { to: "/premium/play-and-learn", label: "Play & Learn", icon: "G" },
+    { to: "/premium/play-and-learn", label: "Play & Learn", icon: "P" },
     { to: "/premium/second-before", label: "Second Before", icon: "S" },
+    { to: "/premium/progress", label: "Progress", icon: "A" },
+    { to: "/premium/how-it-works", label: "How It Works", icon: "?" },
   ];
 
   const communityLinks = user ? [

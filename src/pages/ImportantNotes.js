@@ -303,41 +303,6 @@ export default function ImportantNotes() {
         ))}
       </div>
 
-      {/* Nano Banana Animation Placeholder */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        style={{
-          background: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)",
-          borderRadius: "16px",
-          padding: "30px",
-          textAlign: "center",
-          marginBottom: "40px",
-          border: "2px dashed #f59e0b"
-        }}
-      >
-        <motion.div
-          animate={{ 
-            rotate: [0, 10, -10, 0],
-            scale: [1, 1.1, 1]
-          }}
-          transition={{ 
-            duration: 2, 
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-          style={{ fontSize: "48px", marginBottom: "10px" }}
-        >
-          🍌
-        </motion.div>
-        <p style={{ color: "#92400e", fontWeight: "600", marginBottom: "5px" }}>
-          Nano Banana Animation Zone
-        </p>
-        <p style={{ color: "#b45309", fontSize: "14px" }}>
-          Future animations coming soon!
-        </p>
-      </motion.div>
-
       {/* Ready to Pass Section */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

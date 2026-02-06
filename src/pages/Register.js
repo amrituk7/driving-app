@@ -5,6 +5,7 @@ import { useToast } from "../context/ToastContext";
 import "./Auth.css";
 
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,7 +35,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await registerUser(email, password, role);
+      await registerUser(email, password, role, name);
       showToast("Account created successfully!", "success");
       navigate("/");
     } catch (error) {
@@ -54,6 +55,16 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+            />
+          </div>
+
           <div className="form-group">
             <label>Email</label>
             <input

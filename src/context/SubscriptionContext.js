@@ -35,8 +35,9 @@ export function SubscriptionProvider({ children }) {
   };
 
   const role = auth?.userProfile?.role;
+  const profileSub = auth?.userProfile?.subscription;
   const isAdminOrInstructor = role === "admin" || role === "instructor";
-  const hasRoadMasterPlus = isAdminOrInstructor || isSubscribed("student");
+  const hasRoadMasterPlus = isAdminOrInstructor || isSubscribed("student") || profileSub === "premium";
   const hasRoadMasterPro = isAdminOrInstructor || isSubscribed("instructor");
 
   const value = {

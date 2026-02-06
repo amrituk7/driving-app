@@ -6,10 +6,13 @@ import {
   getDocs,
   getDoc,
   doc,
+  setDoc,
   updateDoc,
   deleteDoc,
   query,
-  where
+  where,
+  orderBy,
+  limit
 } from "firebase/firestore";
 import {
   getAuth,
@@ -46,15 +49,17 @@ export const storage = getStorage(app);
 //
 // AUTH
 //
-export const registerUser = async (email, password, role = "student") => {
+export const registerUser = async (email, password, role = "student", name = "") => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
   
-  // Create user profile in Firestore
-  await addDoc(collection(db, "users"), {
+  // Create user profile in Firestore using uid as document key
+  await setDoc(doc(db, "users", user.uid), {
     uid: user.uid,
     email: user.email,
+    name: name || email.split("@")[0],
     role: role,
+    subscription: "free",
     createdAt: Date.now()
   });
   
@@ -71,11 +76,17 @@ export const logoutUser = async () => {
 };
 
 export const getUserProfile = async (uid) => {
+  // Try direct doc lookup first (new format)
+  const docRef = doc(db, "users", uid);
+  const snap = await getDoc(docRef);
+  if (snap.exists()) return { id: snap.id, ...snap.data() };
+
+  // Fallback: query by uid field (legacy format)
   const q = query(collection(db, "users"), where("uid", "==", uid));
   const snapshot = await getDocs(q);
   if (snapshot.empty) return null;
-  const doc = snapshot.docs[0];
-  return { id: doc.id, ...doc.data() };
+  const d = snapshot.docs[0];
+  return { id: d.id, ...d.data() };
 };
 
 export const onAuthChange = (callback) => {
@@ -319,31 +330,27 @@ export const deleteCommunityPost = async (postId) => {
 };
 
 //
-// GAME SCORING
+// PLAY & LEARN SCORING (subcollection: playAndLearn/{userId}/scores)
 //
-export const saveGameScore = async (userId, game, score) => {
-  const docRef = await addDoc(collection(db, "gameScores"), {
-    userId,
+export const savePlayAndLearnScore = async (userId, game, scoreData) => {
+  const docRef = await addDoc(collection(db, "playAndLearn", userId, "scores"), {
     game,
-    score,
+    ...scoreData,
     timestamp: Date.now()
   });
   return docRef.id;
 };
 
-export const getGameScores = async (userId, game) => {
-  const q = query(
-    collection(db, "gameScores"),
-    where("userId", "==", userId),
-    where("game", "==", game)
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+export const getPlayAndLearnScores = async (userId) => {
+  const snapshot = await getDocs(collection(db, "playAndLearn", userId, "scores"));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 };
 
+//
+// SECOND BEFORE SCORING (subcollection: secondBefore/{userId}/attempts)
+//
 export const saveSecondBeforeAttempt = async (userId, scenarioId, expectedTime, userTime, accuracy) => {
-  const docRef = await addDoc(collection(db, "secondBeforeAttempts"), {
-    userId,
+  const docRef = await addDoc(collection(db, "secondBefore", userId, "attempts"), {
     scenarioId,
     expectedTime,
     userTime,
@@ -354,12 +361,19 @@ export const saveSecondBeforeAttempt = async (userId, scenarioId, expectedTime, 
 };
 
 export const getSecondBeforeAttempts = async (userId) => {
-  const q = query(
-    collection(db, "secondBeforeAttempts"),
-    where("userId", "==", userId)
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const snapshot = await getDocs(collection(db, "secondBefore", userId, "attempts"));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
+
+//
+// PREMIUM PROGRESS (aggregates both games)
+//
+export const getPremiumProgress = async (userId) => {
+  const [playScores, secondAttempts] = await Promise.all([
+    getPlayAndLearnScores(userId),
+    getSecondBeforeAttempts(userId)
+  ]);
+  return { playScores, secondAttempts };
 };
 
 //
