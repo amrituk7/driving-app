@@ -51,8 +51,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  console.log("[v0] AuthContext:", { uid: user?.uid, role: userProfile?.role, subscription: userProfile?.subscription, loading });
-
   const isAdmin = userProfile?.role === "admin";
   const isInstructor = userProfile?.role === "instructor";
   const isStudent = userProfile?.role === "student";

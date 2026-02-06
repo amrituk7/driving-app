@@ -40,8 +40,6 @@ export function SubscriptionProvider({ children }) {
   const hasRoadMasterPlus = isAdminOrInstructor || isSubscribed("student") || profileSub === "premium";
   const hasRoadMasterPro = isAdminOrInstructor || isSubscribed("instructor");
 
-  console.log("[v0] SubscriptionContext:", { role, profileSub, isAdminOrInstructor, hasRoadMasterPlus, subTier: subscription?.tier, subStatus: subscription?.status, loading });
-
   const value = {
     subscription,
     loading,
