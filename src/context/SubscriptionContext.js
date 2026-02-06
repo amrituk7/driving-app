@@ -34,8 +34,10 @@ export function SubscriptionProvider({ children }) {
     return subscription?.tier === tier && subscription?.status === "active";
   };
 
-  const hasRoadMasterPlus = isSubscribed("student");
-  const hasRoadMasterPro = isSubscribed("instructor");
+  const role = auth?.userProfile?.role;
+  const isAdminOrInstructor = role === "admin" || role === "instructor";
+  const hasRoadMasterPlus = isAdminOrInstructor || isSubscribed("student");
+  const hasRoadMasterPro = isAdminOrInstructor || isSubscribed("instructor");
 
   const value = {
     subscription,

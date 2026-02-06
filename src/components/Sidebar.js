@@ -15,12 +15,15 @@ export default function Sidebar() {
     { to: "/lessons", label: "Lessons", icon: "L" },
     { to: "/calendar", label: "Calendar", icon: "C" },
     { to: "/book-lesson", label: "Book Lesson", icon: "+" },
-    { to: "/play-and-learn", label: "Play & Learn", icon: "G", premium: true },
-    { to: "/second-before", label: "Second Before", icon: "S", premium: true },
     { to: "/important-notes", label: "Important Notes", icon: "N" },
     { to: "/tips", label: "Ravi's Tips", icon: "T" },
     { to: "/resources", label: "DVLA Resources", icon: "R" },
     { to: "/notifications", label: "Notifications", icon: "B" },
+  ];
+
+  const premiumLinks = [
+    { to: "/premium/play-and-learn", label: "Play & Learn", icon: "G" },
+    { to: "/premium/second-before", label: "Second Before", icon: "S" },
   ];
 
   const communityLinks = user ? [
@@ -43,25 +46,41 @@ export default function Sidebar() {
             key={link.to}
             to={link.to} 
             className={location.pathname === link.to ? "active" : ""}
-            style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
           >
-            <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <span className="nav-icon">{link.icon}</span>
-              {link.label}
+            <span className="nav-icon">{link.icon}</span>
+            {link.label}
+          </Link>
+        ))}
+
+        {/* RoadMaster+ Premium Section */}
+        <hr style={{ margin: "15px 0", border: "none", borderTop: "1px solid #e5e7eb" }} />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 15px", marginBottom: "4px" }}>
+          <span style={{ fontSize: "11px", fontWeight: "700", color: "#f59e0b", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            RoadMaster+
+          </span>
+          {!hasRoadMasterPlus && (
+            <span style={{
+              fontSize: "9px",
+              fontWeight: "600",
+              background: "linear-gradient(135deg, #f59e0b, #f97316)",
+              color: "white",
+              padding: "2px 6px",
+              borderRadius: "4px",
+              textTransform: "uppercase"
+            }}>
+              PRO
             </span>
-            {link.premium && !hasRoadMasterPlus && (
-              <span style={{
-                fontSize: "9px",
-                fontWeight: "600",
-                background: "linear-gradient(135deg, #f59e0b, #f97316)",
-                color: "white",
-                padding: "2px 6px",
-                borderRadius: "4px",
-                textTransform: "uppercase"
-              }}>
-                PRO
-              </span>
-            )}
+          )}
+        </div>
+        {premiumLinks.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className={location.pathname === link.to ? "active" : ""}
+            style={{ paddingLeft: "25px" }}
+          >
+            <span className="nav-icon">{link.icon}</span>
+            {link.label}
           </Link>
         ))}
 

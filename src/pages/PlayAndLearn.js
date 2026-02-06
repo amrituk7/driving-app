@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSubscription } from "../context/SubscriptionContext";
-import { useNavigate } from "react-router-dom";
-import Paywall from "../components/Paywall";
 
 // Levels configuration
 const LEVELS = [
@@ -47,19 +44,6 @@ const PARKING_REFERENCES = [
 ];
 
 export default function PlayAndLearn() {
-  const { hasRoadMasterPlus } = useSubscription();
-  const navigate = useNavigate();
-
-  if (!hasRoadMasterPlus) {
-    return (
-      <Paywall
-        feature="Second Before Hazard Anticipation Game"
-        tier="student"
-        onSubscribe={() => navigate("/subscribe")}
-      />
-    );
-  }
-
   // XP and Level state
   const [xp, setXP] = useState(() => {
     const saved = localStorage.getItem("roadmasterXP");

@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSubscription } from "../context/SubscriptionContext";
-import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { saveSecondBeforeAttempt, getSecondBeforeAttempts } from "../firebase";
-import Paywall from "../components/Paywall";
 
 const SCENARIOS = [
   {
@@ -63,9 +60,6 @@ const getRating = (accuracy) => {
 };
 
 export default function SecondBefore() {
-  const sub = useSubscription() || {};
-  const hasRoadMasterPlus = sub.hasRoadMasterPlus || false;
-  const auth = useAuth() || {};
   const navigate = useNavigate();
 
   const [gameState, setGameState] = useState("menu"); // menu, countdown, playing, result, stats
@@ -85,16 +79,6 @@ export default function SecondBefore() {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
-
-  if (!hasRoadMasterPlus) {
-    return (
-      <Paywall
-        feature="Second Before"
-        tier="student"
-        onSubscribe={() => navigate("/subscribe")}
-      />
-    );
-  }
 
   const scenario = SCENARIOS[currentScenario];
 
@@ -658,7 +642,7 @@ export default function SecondBefore() {
                 Play Again
               </button>
               <button
-                onClick={() => navigate("/play-and-learn")}
+                onClick={() => navigate("/premium/play-and-learn")}
                 style={{ ...styles.btn, ...styles.btnSecondary, flex: 1 }}
               >
                 Back to Play & Learn

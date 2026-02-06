@@ -25,6 +25,7 @@ import Register from "./pages/Register";
 import StudentDashboard from "./pages/StudentDashboard";
 import PlayAndLearn from "./pages/PlayAndLearn";
 import SecondBefore from "./pages/SecondBefore";
+import PremiumGuard from "./components/PremiumGuard";
 import StudentCommunity from "./pages/StudentCommunity";
 import InstructorCommunity from "./pages/InstructorCommunity";
 import ExternalCommunities from "./pages/ExternalCommunities";
@@ -72,9 +73,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/student-dashboard" element={<StudentDashboard />} />
 
-            {/* Play & Learn */}
-            <Route path="/play-and-learn" element={<PlayAndLearn />} />
-            <Route path="/second-before" element={<SecondBefore />} />
+            {/* Premium - RoadMaster+ */}
+            <Route path="/premium/play-and-learn" element={<PremiumGuard feature="Play & Learn"><PlayAndLearn /></PremiumGuard>} />
+            <Route path="/premium/second-before" element={<PremiumGuard feature="Second Before"><SecondBefore /></PremiumGuard>} />
 
             {/* Community */}
             <Route path="/student-community" element={<StudentCommunity />} />
