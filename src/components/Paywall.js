@@ -11,9 +11,10 @@ const plans = {
     benefits: [
       "Play & Learn Pro",
       "Second Before hazard anticipation game",
-      "Ravi's Tips",
-      "Important Notes",
-      "Student Community"
+      "Mirror-Signal-Manoeuvre tap game",
+      "Hazard spotting game",
+      "Parking reference matching game",
+      "Road positioning game"
     ],
     color: "#3b82f6",
     tier: "student"

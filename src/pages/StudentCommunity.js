@@ -2,32 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { getCommunityPosts, createCommunityPost, deleteCommunityPost, getConversations } from "../firebase";
-import { useSubscription } from "../context/SubscriptionContext";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
-import Paywall from "../components/Paywall";
 
 export default function StudentCommunity() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("feed"); // feed, local, dms, share
-  const [showPaywall, setShowPaywall] = useState(false);
   const [newPost, setNewPost] = useState("");
   const [postType, setPostType] = useState("text"); // text, progress, poll
   const [conversations, setConversations] = useState([]);
-  const { hasRoadMasterPlus } = useSubscription();
   const { user } = useAuth() || {};
   const { showToast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!hasRoadMasterPlus) {
-      setShowPaywall(true);
-      return;
-    }
-
     loadContent();
-  }, [hasRoadMasterPlus, activeTab]);
+  }, [activeTab]);
 
   const loadContent = async () => {
     try {
@@ -70,16 +61,6 @@ export default function StudentCommunity() {
       showToast("Error creating post", "error");
     }
   };
-
-  if (showPaywall && !hasRoadMasterPlus) {
-    return (
-      <Paywall
-        feature="Student Community"
-        tier="student"
-        onSubscribe={() => navigate("/subscribe")}
-      />
-    );
-  }
 
   return (
     <div style={{ maxWidth: "900px" }}>
