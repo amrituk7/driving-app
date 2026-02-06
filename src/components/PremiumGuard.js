@@ -13,6 +13,8 @@ export default function PremiumGuard({ children, feature = "Premium Feature" }) 
   const role = userProfile?.role;
   const isAdminOrInstructor = role === "admin" || role === "instructor";
 
+  console.log("[v0] PremiumGuard check:", { feature, role, subscription: userProfile?.subscription, isAdminOrInstructor, hasRoadMasterPlus, uid: auth?.user?.uid });
+
   if (isAdminOrInstructor || hasRoadMasterPlus) {
     return children;
   }
