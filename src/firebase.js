@@ -53,13 +53,16 @@ export const registerUser = async (email, password, role = "student", name = "")
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
   
+  // Admins and instructors get premium by default
+  const sub = (role === "admin" || role === "instructor") ? "premium" : "free";
+
   // Create user profile in Firestore using uid as document key
   await setDoc(doc(db, "users", user.uid), {
     uid: user.uid,
     email: user.email,
     name: name || email.split("@")[0],
     role: role,
-    subscription: "free",
+    subscription: sub,
     createdAt: Date.now()
   });
   
@@ -91,6 +94,12 @@ export const getUserProfile = async (uid) => {
 
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback);
+};
+
+// Admin helper: update user role or subscription
+export const updateUserProfile = async (uid, data) => {
+  const docRef = doc(db, "users", uid);
+  await updateDoc(docRef, data);
 };
 
 //

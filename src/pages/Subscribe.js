@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { createSubscription } from "../firebase";
+import { createSubscription, db } from "../firebase";
+import { doc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 
@@ -57,8 +58,11 @@ export default function Subscribe() {
     setLoading(true);
     try {
       await createSubscription(user.uid, tier);
+      // Also update the user profile document so PremiumGuard picks it up immediately
+      await updateDoc(doc(db, "users", user.uid), { subscription: "premium" });
       showToast("Successfully subscribed!", "success");
-      navigate("/");
+      // Force reload so AuthContext re-fetches the updated profile
+      window.location.href = "/";
     } catch (error) {
       showToast("Error subscribing. Please try again.", "error");
       console.error(error);

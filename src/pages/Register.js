@@ -10,6 +10,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("student");
+  const [adminCode, setAdminCode] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -29,6 +30,12 @@ export default function Register() {
 
     if (password.length < 6) {
       showToast("Password must be at least 6 characters", "error");
+      return;
+    }
+
+    // Admin passphrase check
+    if (role === "admin" && adminCode !== "roadmaster2025") {
+      showToast("Invalid admin passphrase", "error");
       return;
     }
 
@@ -100,8 +107,21 @@ export default function Register() {
             <select value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="student">Student</option>
               <option value="instructor">Instructor</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
+
+          {role === "admin" && (
+            <div className="form-group">
+              <label>Admin Passphrase</label>
+              <input
+                type="password"
+                value={adminCode}
+                onChange={(e) => setAdminCode(e.target.value)}
+                placeholder="Enter admin passphrase"
+              />
+            </div>
+          )}
 
           <button type="submit" className="auth-button" disabled={loading}>
             {loading ? "Creating account..." : "Create Account"}
