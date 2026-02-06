@@ -319,6 +319,50 @@ export const deleteCommunityPost = async (postId) => {
 };
 
 //
+// GAME SCORING
+//
+export const saveGameScore = async (userId, game, score) => {
+  const docRef = await addDoc(collection(db, "gameScores"), {
+    userId,
+    game,
+    score,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getGameScores = async (userId, game) => {
+  const q = query(
+    collection(db, "gameScores"),
+    where("userId", "==", userId),
+    where("game", "==", game)
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const saveSecondBeforeAttempt = async (userId, scenarioId, expectedTime, userTime, accuracy) => {
+  const docRef = await addDoc(collection(db, "secondBeforeAttempts"), {
+    userId,
+    scenarioId,
+    expectedTime,
+    userTime,
+    accuracy,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getSecondBeforeAttempts = async (userId) => {
+  const q = query(
+    collection(db, "secondBeforeAttempts"),
+    where("userId", "==", userId)
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+//
 // DIRECT MESSAGING (Community DMs)
 //
 export const sendDirectMessage = async (senderId, recipientId, content) => {

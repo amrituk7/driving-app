@@ -16,6 +16,7 @@ export default function Sidebar() {
     { to: "/calendar", label: "Calendar", icon: "C" },
     { to: "/book-lesson", label: "Book Lesson", icon: "+" },
     { to: "/play-and-learn", label: "Play & Learn", icon: "G", premium: true },
+    { to: "/second-before", label: "Second Before", icon: "S", premium: true },
     { to: "/important-notes", label: "Important Notes", icon: "N" },
     { to: "/tips", label: "Ravi's Tips", icon: "T" },
     { to: "/resources", label: "DVLA Resources", icon: "R" },

@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import StudentDashboard from "./pages/StudentDashboard";
 import PlayAndLearn from "./pages/PlayAndLearn";
+import SecondBefore from "./pages/SecondBefore";
 import StudentCommunity from "./pages/StudentCommunity";
 import InstructorCommunity from "./pages/InstructorCommunity";
 import ExternalCommunities from "./pages/ExternalCommunities";
@@ -73,6 +74,7 @@ function App() {
 
             {/* Play & Learn */}
             <Route path="/play-and-learn" element={<PlayAndLearn />} />
+            <Route path="/second-before" element={<SecondBefore />} />
 
             {/* Community */}
             <Route path="/student-community" element={<StudentCommunity />} />

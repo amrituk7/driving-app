@@ -62,7 +62,7 @@ export default function PlayAndLearn() {
 
   // XP and Level state
   const [xp, setXP] = useState(() => {
-    const saved = localStorage.getItem("bananaXP");
+    const saved = localStorage.getItem("roadmasterXP");
     return saved ? parseInt(saved, 10) : 0;
   });
   const [showXPGain, setShowXPGain] = useState(false);
@@ -106,7 +106,7 @@ export default function PlayAndLearn() {
 
   // Save XP to localStorage
   useEffect(() => {
-    localStorage.setItem("bananaXP", xp.toString());
+    localStorage.setItem("roadmasterXP", xp.toString());
   }, [xp]);
 
   // Add XP with animation
