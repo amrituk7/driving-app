@@ -1,5 +1,6 @@
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../firebase";
+// Requires firebase/functions which is now exported from firebase.js
 
 export async function createStripeAccount(userId) {
   const callable = httpsCallable(functions, "createStripeAccount");
