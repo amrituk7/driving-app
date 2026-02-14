@@ -111,17 +111,14 @@ function AccordionItem({ item, isOpen, onToggle }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="mb-4"
+      style={{ marginBottom: "16px" }}
     >
       <div 
-        className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100"
-        style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)" }}
+        style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)", background: "white", border: "1px solid #f3f4f6" }}
       >
         <button
           onClick={onToggle}
-          className="w-full"
           style={{
             width: "100%",
             padding: "20px",

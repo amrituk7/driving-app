@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 
 function RoadNotes() {
-  const card =
-    "p-5 border border-gray-200 rounded-xl hover:shadow-md transition cursor-pointer";
+  const cardStyle = {
+    padding: "20px",
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    cursor: "pointer",
+    transition: "box-shadow 0.2s",
+    background: "white",
+  };
 
   const sections = [
     {
@@ -19,11 +25,11 @@ function RoadNotes() {
       title: "Driving Skills",
       items: [
         "Moving Off Safely",
-        "Junctions (Left, Right, T‑Junctions)",
+        "Junctions (Left, Right, T-Junctions)",
         "Roundabouts (Mini & Large)",
         "Lane Discipline",
         "Speed Control",
-        "Mirrors–Signal–Position–Speed–Look",
+        "Mirrors-Signal-Position-Speed-Look",
       ],
     },
     {
@@ -39,26 +45,29 @@ function RoadNotes() {
   ];
 
   return (
-    <div className="p-6 space-y-8 max-w-3xl mx-auto">
+    <div style={{ padding: "24px", maxWidth: "768px", margin: "0 auto" }}>
 
-      <Link to="/dashboard" className="text-blue-600">
-        ← Back to Dashboard
+      <Link to="/" style={{ color: "#2563eb", textDecoration: "none" }}>
+        &larr; Back to Dashboard
       </Link>
 
-      <h1 className="text-3xl font-semibold">Ravi’s Road Notes</h1>
-      <p className="text-gray-600">
+      <h1 style={{ fontSize: "28px", fontWeight: "600", marginTop: "16px" }}>Ravi's Road Notes</h1>
+      <p style={{ color: "#6b7280", marginBottom: "32px" }}>
         A collection of essential driving skills, parking techniques, and instructor tips.
       </p>
 
-      {/* Sections */}
       {sections.map((section, index) => (
-        <div key={index} className="space-y-4">
-          <h2 className="text-2xl font-semibold">{section.title}</h2>
+        <div key={index} style={{ marginBottom: "32px" }}>
+          <h2 style={{ fontSize: "22px", fontWeight: "600", marginBottom: "16px" }}>{section.title}</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gap: "16px",
+          }}>
             {section.items.map((item, i) => (
-              <div key={i} className={card}>
-                <p className="font-medium">{item}</p>
+              <div key={i} style={cardStyle}>
+                <p style={{ fontWeight: "500", margin: 0 }}>{item}</p>
               </div>
             ))}
           </div>

@@ -8,7 +8,7 @@ function CarFeatures() {
     { title: "Mirrors & Blind Spots", status: "Completed" },
     { title: "Steering Control", status: "Needs Practice" },
     { title: "Clutch Control", status: "Not Started" },
-    { title: "Gears (1–5 + Reverse)", status: "Not Started" },
+    { title: "Gears (1-5 + Reverse)", status: "Not Started" },
     { title: "Handbrake & Footbrake", status: "Completed" },
     { title: "Indicators & Signals", status: "Completed" },
     { title: "Reference Points", status: "Needs Practice" },
@@ -17,33 +17,41 @@ function CarFeatures() {
     { title: "Show Me / Tell Me Questions", status: "Needs Practice" },
   ];
 
-  const card =
-    "p-4 border border-gray-200 rounded-xl hover:shadow-md transition cursor-pointer";
-
-  const statusStyle = (status) => {
-    if (status === "Completed") return "text-green-600 font-medium";
-    if (status === "Needs Practice") return "text-yellow-600 font-medium";
-    return "text-gray-500 font-medium";
+  const statusColor = (status) => {
+    if (status === "Completed") return "#16a34a";
+    if (status === "Needs Practice") return "#ca8a04";
+    return "#6b7280";
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div style={{ padding: "24px", maxWidth: "900px", margin: "0 auto" }}>
 
-      <Link to={`/student/${id}`} className="text-blue-600">
-        ← Back to Profile
+      <Link to={`/students/${id}`} style={{ color: "#2563eb", textDecoration: "none" }}>
+        &larr; Back to Profile
       </Link>
 
-      <h1 className="text-3xl font-semibold">Car & Features</h1>
+      <h1 style={{ fontSize: "28px", fontWeight: "600", marginTop: "16px" }}>Car & Features</h1>
 
-      <p className="text-gray-600">
+      <p style={{ color: "#6b7280", marginBottom: "24px" }}>
         Everything the student needs to know about the car before and during driving.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+        gap: "16px",
+      }}>
         {features.map((item, index) => (
-          <div key={index} className={card}>
-            <h3 className="text-lg font-semibold">{item.title}</h3>
-            <p className={`mt-2 ${statusStyle(item.status)}`}>{item.status}</p>
+          <div key={index} style={{
+            padding: "16px",
+            border: "1px solid #e5e7eb",
+            borderRadius: "12px",
+            background: "white",
+            cursor: "pointer",
+            transition: "box-shadow 0.2s",
+          }}>
+            <h3 style={{ fontSize: "16px", fontWeight: "600", margin: "0 0 8px 0" }}>{item.title}</h3>
+            <p style={{ color: statusColor(item.status), fontWeight: "500", margin: 0 }}>{item.status}</p>
           </div>
         ))}
       </div>

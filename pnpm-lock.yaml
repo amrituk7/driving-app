@@ -8,18 +8,12 @@ importers:
 
   .:
     dependencies:
-      autoprefixer:
-        specifier: ^10.4.0
-        version: 10.4.24(postcss@8.5.6)
       firebase:
         specifier: ^11.0.0
         version: 11.10.0
       framer-motion:
         specifier: ^11.0.0
         version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      postcss:
-        specifier: ^8.4.0
-        version: 8.5.6
       react:
         specifier: ^18.3.0
         version: 18.3.1
@@ -32,9 +26,6 @@ importers:
       react-scripts:
         specifier: 5.0.1
         version: 5.0.1(@babel/plugin-syntax-flow@7.28.6(@babel/core@7.29.0))(@babel/plugin-transform-react-jsx@7.28.6(@babel/core@7.29.0))(@types/babel__core@7.20.5)(eslint@8.57.1)(react@18.3.1)(type-fest@0.21.3)(typescript@4.9.5)
-      tailwindcss:
-        specifier: ^3.4.0
-        version: 3.4.19
 
 packages:
 

@@ -13,10 +13,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log("[v0] AuthProvider useEffect running");
     let unsubscribe = () => {};
+    let settled = false;
+    
+    const settle = () => {
+      if (!settled) {
+        settled = true;
+        setLoading(false);
+        console.log("[v0] Auth loading set to false");
+      }
+    };
     
     try {
       unsubscribe = onAuthChange(async (firebaseUser) => {
+        console.log("[v0] onAuthChange callback, user:", firebaseUser?.email || null);
         setUser(firebaseUser);
         
         if (firebaseUser) {
@@ -31,14 +42,23 @@ export function AuthProvider({ children }) {
           setUserProfile(null);
         }
         
-        setLoading(false);
+        settle();
       });
     } catch (error) {
       console.error("Error setting up auth listener:", error);
-      setLoading(false);
+      settle();
     }
 
-    return () => unsubscribe();
+    // Safety timeout - if auth never responds in 3 seconds, stop loading
+    const timeout = setTimeout(() => {
+      console.log("[v0] Auth timeout reached, forcing settle");
+      settle();
+    }, 3000);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const logout = async () => {
