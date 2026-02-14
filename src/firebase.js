@@ -38,17 +38,24 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
-// Init Firebase
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
-export const functions = getFunctions(app);
+// Init Firebase (wrapped for embedded preview compatibility)
+let app, db, auth, storage, functions;
+try {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+  storage = getStorage(app);
+  functions = getFunctions(app);
+} catch (error) {
+  console.warn("Firebase initialization failed:", error.message);
+}
+export { db, auth, storage, functions };
 
 //
 // AUTH
 //
 export const registerUser = async (email, password, role = "student") => {
+  if (!auth) throw new Error("Firebase Auth is not available");
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
   
@@ -64,11 +71,13 @@ export const registerUser = async (email, password, role = "student") => {
 };
 
 export const loginUser = async (email, password) => {
+  if (!auth) throw new Error("Firebase Auth is not available");
   const userCredential = await signInWithEmailAndPassword(auth, email, password);
   return userCredential.user;
 };
 
 export const logoutUser = async () => {
+  if (!auth) return;
   await signOut(auth);
 };
 
@@ -81,6 +90,10 @@ export const getUserProfile = async (uid) => {
 };
 
 export const onAuthChange = (callback) => {
+  if (!auth) {
+    callback(null);
+    return () => {};
+  }
   return onAuthStateChanged(auth, callback);
 };
 
