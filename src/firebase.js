@@ -290,3 +290,21 @@ export const deleteExpense = async (id) => {
   const docRef = doc(db, "expenses", id);
   await deleteDoc(docRef);
 };
+
+//
+// PAYMENT AUDIT TRAIL (subcollection: payments/{id}/events)
+//
+export const addPaymentEvent = async (paymentId, eventData) => {
+  const eventsRef = collection(db, "payments", paymentId, "events");
+  const docRef = await addDoc(eventsRef, {
+    ...eventData,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getPaymentEvents = async (paymentId) => {
+  const eventsRef = collection(db, "payments", paymentId, "events");
+  const snapshot = await getDocs(eventsRef);
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
