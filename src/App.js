@@ -14,6 +14,7 @@ import LessonDetails from "./pages/LessonDetails";
 import BookLesson from "./pages/BookLesson";
 
 import NotificationCenter from "./pages/NotificationCenter";
+import PaymentWall from "./pages/PaymentWall";
 import Resources from "./pages/Resources";
 import Tips from "./pages/Tips";
 import ImportantNotes from "./pages/ImportantNotes";
@@ -41,6 +42,9 @@ function App() {
             <Route path="/lessons" element={<Lessons />} />
             <Route path="/lessons/:id" element={<LessonDetails />} />
             <Route path="/book-lesson" element={<BookLesson />} />
+
+            {/* Payments */}
+            <Route path="/payments" element={<PaymentWall />} />
 
             {/* Resources & Tips */}
             <Route path="/resources" element={<Resources />} />

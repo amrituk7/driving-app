@@ -238,3 +238,55 @@ export const deleteTip = async (id) => {
   const docRef = doc(db, "tips", id);
   await deleteDoc(docRef);
 };
+
+//
+// PAYMENTS (income from students)
+//
+export const addPayment = async (paymentData) => {
+  const docRef = await addDoc(collection(db, "payments"), {
+    ...paymentData,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getPayments = async () => {
+  const snapshot = await getDocs(collection(db, "payments"));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
+
+export const updatePayment = async (id, data) => {
+  const docRef = doc(db, "payments", id);
+  await updateDoc(docRef, data);
+};
+
+export const deletePayment = async (id) => {
+  const docRef = doc(db, "payments", id);
+  await deleteDoc(docRef);
+};
+
+//
+// EXPENSES (outgoing costs)
+//
+export const addExpense = async (expenseData) => {
+  const docRef = await addDoc(collection(db, "expenses"), {
+    ...expenseData,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getExpenses = async () => {
+  const snapshot = await getDocs(collection(db, "expenses"));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
+
+export const updateExpense = async (id, data) => {
+  const docRef = doc(db, "expenses", id);
+  await updateDoc(docRef, data);
+};
+
+export const deleteExpense = async (id) => {
+  const docRef = doc(db, "expenses", id);
+  await deleteDoc(docRef);
+};
