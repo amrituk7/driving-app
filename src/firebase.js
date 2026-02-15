@@ -26,15 +26,15 @@ import {
   deleteObject
 } from "firebase/storage";
 
-// Firebase config
+// Firebase config - uses environment variables (NEVER hardcode keys)
 const firebaseConfig = {
-  apiKey: "AIzaSyBHAGf5NleYjckCad9mjr09_doR_5lce4Y",
-  authDomain: "roadmaster-23cbc.firebaseapp.com",
-  projectId: "roadmaster-23cbc",
-  storageBucket: "roadmaster-23cbc.firebasestorage.app",
-  messagingSenderId: "597704342474",
-  appId: "1:597704342474:web:6ad71bf5dbbff79b452d33",
-  measurementId: "G-GSCV96CCV9"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 // Init Firebase
