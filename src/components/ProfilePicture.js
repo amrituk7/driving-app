@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { uploadProfilePicture, deleteProfilePicture } from "../firebase";
 import { useToast } from "../context/ToastContext";
-import "./ProfilePicture.css";
+
 
 function getInitials(name) {
   if (!name) return "?";

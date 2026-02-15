@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../firebase";
 import { useToast } from "../context/ToastContext";
-import "./Auth.css";
+
 
 export default function Register() {
   const [email, setEmail] = useState("");
