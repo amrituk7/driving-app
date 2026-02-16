@@ -637,3 +637,70 @@
 }
 
 .btn-refund-confirm:hover { opacity: 0.9; }
+
+/* Stripe */
+.btn-stripe {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #635bff 0%, #4f46e5 100%);
+  color: white;
+}
+
+.btn-stripe:hover { opacity: 0.9; }
+.btn-stripe:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.stripe-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.stripe-banner.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 2px solid #a7f3d0;
+}
+
+.stripe-banner.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 2px solid #fca5a5;
+}
+
+.stripe-banner.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 2px solid #93c5fd;
+}
+
+.stripe-banner-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.stripe-banner-close:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
+}

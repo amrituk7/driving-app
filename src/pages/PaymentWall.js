@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   getPayments,
   addPayment,
@@ -43,6 +44,7 @@ function statusLabel(s) {
 }
 
 export default function PaymentWall() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [payments, setPayments] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [students, setStudents] = useState([]);
@@ -51,6 +53,10 @@ export default function PaymentWall() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [filterMonth, setFilterMonth] = useState("all");
+
+  // Stripe
+  const [stripeLoading, setStripeLoading] = useState(null); // paymentId being processed
+  const [stripeMessage, setStripeMessage] = useState(null); // { type: "success"|"error"|"info", text: "" }
 
   // Modals
   const [receiveModal, setReceiveModal] = useState(null);
@@ -108,6 +114,113 @@ export default function PaymentWall() {
       console.error("Error loading payment data:", err);
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Handle Stripe redirect on mount
+  const verifyStripeSession = useCallback(async (sessionId) => {
+    try {
+      setStripeMessage({ type: "info", text: "Verifying Stripe payment..." });
+      const res = await fetch(`/api/verify-session?session_id=${sessionId}`);
+      const data = await res.json();
+
+      if (data.status === "paid" && data.paymentId) {
+        // Find the payment and update it
+        const payment = payments.find(p => p.id === data.paymentId);
+        if (payment) {
+          const newPaidAmount = Number(payment.paidAmount || 0) + data.amountPaid;
+          const totalAmount = Number(payment.amount || 0);
+          const newStatus = newPaidAmount >= totalAmount ? "paid" : "partial";
+
+          await updatePayment(data.paymentId, {
+            paidAmount: newPaidAmount,
+            paidAt: data.paidAt || new Date().toISOString().split("T")[0],
+            paymentMethod: "stripe",
+            status: newStatus,
+            stripeSessionId: sessionId
+          });
+
+          await addPaymentEvent(data.paymentId, {
+            type: "received",
+            amount: data.amountPaid,
+            date: new Date().toISOString().split("T")[0],
+            method: "stripe",
+            note: `Stripe payment from ${data.customerEmail || data.studentName}`
+          });
+
+          await loadData();
+          setStripeMessage({ type: "success", text: `Payment of £${data.amountPaid.toFixed(2)} received from ${data.studentName} via Stripe.` });
+        } else {
+          setStripeMessage({ type: "success", text: `Stripe payment confirmed (£${data.amountPaid.toFixed(2)}).` });
+        }
+      } else if (data.status === "unpaid") {
+        setStripeMessage({ type: "info", text: "Payment is still processing. It will update automatically." });
+      }
+    } catch (err) {
+      console.error("Error verifying Stripe session:", err);
+      setStripeMessage({ type: "error", text: "Could not verify Stripe payment. Check your payment records." });
+    }
+
+    // Clear URL params
+    setSearchParams({});
+  }, [payments, setSearchParams]);
+
+  useEffect(() => {
+    const stripeStatus = searchParams.get("stripe");
+    const sessionId = searchParams.get("session_id");
+
+    if (stripeStatus === "success" && sessionId && payments.length > 0) {
+      verifyStripeSession(sessionId);
+    } else if (stripeStatus === "cancelled") {
+      setStripeMessage({ type: "info", text: "Stripe checkout was cancelled. No payment was taken." });
+      setSearchParams({});
+    }
+  }, [searchParams, payments.length, verifyStripeSession, setSearchParams]);
+
+  // Send Stripe checkout link
+  async function handleStripeCheckout(payment) {
+    if (stripeLoading) return;
+    setStripeLoading(payment.id);
+    setStripeMessage(null);
+
+    try {
+      const student = students.find(s => s.id === payment.studentId);
+      const remaining = Number(payment.amount || 0) - Number(payment.paidAmount || 0);
+
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentId: payment.id,
+          studentName: payment.studentName || "Student",
+          studentEmail: student?.email || "",
+          amount: remaining,
+          lessonDescription: payment.notes || "Driving lesson payment",
+          instructorId: ""
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to create checkout session");
+      }
+
+      // Copy link to clipboard and also open it
+      if (data.url) {
+        await navigator.clipboard.writeText(data.url).catch(() => {});
+        setStripeMessage({
+          type: "success",
+          text: `Stripe link created and copied! Share it with ${payment.studentName}. Opening checkout...`
+        });
+        // Open in new tab after brief delay so user sees the message
+        setTimeout(() => window.open(data.url, "_blank"), 800);
+      }
+    } catch (err) {
+      console.error("Stripe checkout error:", err);
+      setStripeMessage({ type: "error", text: `Stripe error: ${err.message}` });
+    } finally {
+      setStripeLoading(null);
     }
   }
 
@@ -421,6 +534,14 @@ export default function PaymentWall() {
         <p>Track income from students, issue refunds, and manage expenses.</p>
       </div>
 
+      {/* Stripe Message Banner */}
+      {stripeMessage && (
+        <div className={`stripe-banner ${stripeMessage.type}`}>
+          <span>{stripeMessage.text}</span>
+          <button onClick={() => setStripeMessage(null)} className="stripe-banner-close">x</button>
+        </div>
+      )}
+
       {/* Stats - upgraded with gross/refund/net */}
       <div className="payment-stats">
         <div className="payment-stat-box">
@@ -615,6 +736,15 @@ export default function PaymentWall() {
                         </td>
                         <td>
                           <div className="action-btns">
+                            {canReceive && (
+                              <button
+                                className="btn-stripe"
+                                onClick={() => handleStripeCheckout(p)}
+                                disabled={stripeLoading === p.id}
+                              >
+                                {stripeLoading === p.id ? "Creating..." : "Stripe Pay"}
+                              </button>
+                            )}
                             {canReceive && (
                               <button className="btn-receive" onClick={() => openReceiveModal(p)}>
                                 Receive
