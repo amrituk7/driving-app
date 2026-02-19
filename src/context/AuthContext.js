@@ -51,6 +51,7 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const isAdmin = userProfile?.role === "admin";
   const isInstructor = userProfile?.role === "instructor";
   const isStudent = userProfile?.role === "student";
 
@@ -59,6 +60,7 @@ export function AuthProvider({ children }) {
     userProfile,
     loading,
     logout,
+    isAdmin,
     isInstructor,
     isStudent,
     isAuthenticated: !!user

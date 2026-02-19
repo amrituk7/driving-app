@@ -6,10 +6,13 @@ import {
   getDocs,
   getDoc,
   doc,
+  setDoc,
   updateDoc,
   deleteDoc,
   query,
-  where
+  where,
+  orderBy,
+  limit
 } from "firebase/firestore";
 import {
   getAuth,
@@ -46,15 +49,20 @@ export const storage = getStorage(app);
 //
 // AUTH
 //
-export const registerUser = async (email, password, role = "student") => {
+export const registerUser = async (email, password, role = "student", name = "") => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   const user = userCredential.user;
   
-  // Create user profile in Firestore
-  await addDoc(collection(db, "users"), {
+  // Admins and instructors get premium by default
+  const sub = (role === "admin" || role === "instructor") ? "premium" : "free";
+
+  // Create user profile in Firestore using uid as document key
+  await setDoc(doc(db, "users", user.uid), {
     uid: user.uid,
     email: user.email,
+    name: name || email.split("@")[0],
     role: role,
+    subscription: sub,
     createdAt: Date.now()
   });
   
@@ -71,15 +79,27 @@ export const logoutUser = async () => {
 };
 
 export const getUserProfile = async (uid) => {
+  // Try direct doc lookup first (new format)
+  const docRef = doc(db, "users", uid);
+  const snap = await getDoc(docRef);
+  if (snap.exists()) return { id: snap.id, ...snap.data() };
+
+  // Fallback: query by uid field (legacy format)
   const q = query(collection(db, "users"), where("uid", "==", uid));
   const snapshot = await getDocs(q);
   if (snapshot.empty) return null;
-  const doc = snapshot.docs[0];
-  return { id: doc.id, ...doc.data() };
+  const d = snapshot.docs[0];
+  return { id: d.id, ...d.data() };
 };
 
 export const onAuthChange = (callback) => {
   return onAuthStateChanged(auth, callback);
+};
+
+// Admin helper: update user role or subscription
+export const updateUserProfile = async (uid, data) => {
+  const docRef = doc(db, "users", uid);
+  await updateDoc(docRef, data);
 };
 
 //
@@ -166,6 +186,17 @@ export const getLessonsForStudent = async (studentId) => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getLesson = async (id) => {
+  const docRef = doc(db, "lessons", id);
+  const snapshot = await getDoc(docRef);
+  return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null;
+};
+
+export const updateLesson = async (id, data) => {
+  const docRef = doc(db, "lessons", id);
+  await updateDoc(docRef, data);
+};
+
 export const deleteLesson = async (id) => {
   const docRef = doc(db, "lessons", id);
   await deleteDoc(docRef);
@@ -208,6 +239,15 @@ export const getNotifications = async () => {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
 
+export const getNotificationsForStudent = async (studentId) => {
+  const q = query(
+    collection(db, "notifications"),
+    where("studentId", "==", studentId)
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
 export const markNotificationRead = async (id) => {
   const docRef = doc(db, "notifications", id);
   await updateDoc(docRef, { read: true });
@@ -237,4 +277,154 @@ export const getTips = async () => {
 export const deleteTip = async (id) => {
   const docRef = doc(db, "tips", id);
   await deleteDoc(docRef);
+};
+
+//
+// SUBSCRIPTIONS
+//
+export const createSubscription = async (userId, tier) => {
+  const docRef = await addDoc(collection(db, "subscriptions"), {
+    userId,
+    tier,
+    startDate: Date.now(),
+    endDate: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
+    status: "active",
+    autoRenew: true
+  });
+  return docRef.id;
+};
+
+export const getUserSubscription = async (userId) => {
+  const q = query(
+    collection(db, "subscriptions"),
+    where("userId", "==", userId),
+    where("status", "==", "active")
+  );
+  const snapshot = await getDocs(q);
+  if (snapshot.empty) return null;
+  const sub = snapshot.docs[0];
+  return { id: sub.id, ...sub.data() };
+};
+
+export const cancelSubscription = async (subscriptionId) => {
+  const docRef = doc(db, "subscriptions", subscriptionId);
+  await updateDoc(docRef, { status: "cancelled" });
+};
+
+//
+// COMMUNITY POSTS
+//
+export const createCommunityPost = async (postData) => {
+  const docRef = await addDoc(collection(db, "community-posts"), {
+    ...postData,
+    timestamp: Date.now(),
+    likes: 0,
+    comments: 0
+  });
+  return docRef.id;
+};
+
+export const getCommunityPosts = async (community) => {
+  const q = query(
+    collection(db, "community-posts"),
+    where("community", "==", community)
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+};
+
+export const deleteCommunityPost = async (postId) => {
+  const docRef = doc(db, "community-posts", postId);
+  await deleteDoc(docRef);
+};
+
+//
+// PLAY & LEARN SCORING (subcollection: playAndLearn/{userId}/scores)
+//
+export const savePlayAndLearnScore = async (userId, game, scoreData) => {
+  const docRef = await addDoc(collection(db, "playAndLearn", userId, "scores"), {
+    game,
+    ...scoreData,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getPlayAndLearnScores = async (userId) => {
+  const snapshot = await getDocs(collection(db, "playAndLearn", userId, "scores"));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
+
+//
+// SECOND BEFORE SCORING (subcollection: secondBefore/{userId}/attempts)
+//
+export const saveSecondBeforeAttempt = async (userId, scenarioId, expectedTime, userTime, accuracy) => {
+  const docRef = await addDoc(collection(db, "secondBefore", userId, "attempts"), {
+    scenarioId,
+    expectedTime,
+    userTime,
+    accuracy,
+    timestamp: Date.now()
+  });
+  return docRef.id;
+};
+
+export const getSecondBeforeAttempts = async (userId) => {
+  const snapshot = await getDocs(collection(db, "secondBefore", userId, "attempts"));
+  return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
+
+//
+// PREMIUM PROGRESS (aggregates both games)
+//
+export const getPremiumProgress = async (userId) => {
+  const [playScores, secondAttempts] = await Promise.all([
+    getPlayAndLearnScores(userId),
+    getSecondBeforeAttempts(userId)
+  ]);
+  return { playScores, secondAttempts };
+};
+
+//
+// DIRECT MESSAGING (Community DMs)
+//
+export const sendDirectMessage = async (senderId, recipientId, content) => {
+  const docRef = await addDoc(collection(db, "direct-messages"), {
+    senderId,
+    recipientId,
+    content,
+    timestamp: Date.now(),
+    read: false
+  });
+  return docRef.id;
+};
+
+export const getDirectMessages = async (userId1, userId2) => {
+  const q = query(
+    collection(db, "direct-messages"),
+    where("senderId", "in", [userId1, userId2])
+  );
+  const snapshot = await getDocs(q);
+  const messages = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return messages.filter(
+    (m) => (m.senderId === userId1 && m.recipientId === userId2) || 
+           (m.senderId === userId2 && m.recipientId === userId1)
+  ).sort((a, b) => a.timestamp - b.timestamp);
+};
+
+export const getConversations = async (userId) => {
+  const q = query(
+    collection(db, "direct-messages"),
+    where("senderId", "==", userId)
+  );
+  const snapshot = await getDocs(q);
+  const conversations = new Map();
+  snapshot.docs.forEach((doc) => {
+    const data = doc.data();
+    const key = data.recipientId;
+    if (!conversations.has(key)) {
+      conversations.set(key, { userId: key, lastMessage: data.content, timestamp: data.timestamp });
+    }
+  });
+  return Array.from(conversations.values()).sort((a, b) => b.timestamp - a.timestamp);
 };

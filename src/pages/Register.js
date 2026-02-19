@@ -5,10 +5,12 @@ import { useToast } from "../context/ToastContext";
 import "./Auth.css";
 
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("student");
+  const [adminCode, setAdminCode] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -31,10 +33,16 @@ export default function Register() {
       return;
     }
 
+    // Admin passphrase check
+    if (role === "admin" && adminCode !== "roadmaster2025") {
+      showToast("Invalid admin passphrase", "error");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await registerUser(email, password, role);
+      await registerUser(email, password, role, name);
       showToast("Account created successfully!", "success");
       navigate("/");
     } catch (error) {
@@ -54,6 +62,16 @@ export default function Register() {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
+          <div className="form-group">
+            <label>Full Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+            />
+          </div>
+
           <div className="form-group">
             <label>Email</label>
             <input
@@ -89,8 +107,21 @@ export default function Register() {
             <select value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="student">Student</option>
               <option value="instructor">Instructor</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
+
+          {role === "admin" && (
+            <div className="form-group">
+              <label>Admin Passphrase</label>
+              <input
+                type="password"
+                value={adminCode}
+                onChange={(e) => setAdminCode(e.target.value)}
+                placeholder="Enter admin passphrase"
+              />
+            </div>
+          )}
 
           <button type="submit" className="auth-button" disabled={loading}>
             {loading ? "Creating account..." : "Create Account"}

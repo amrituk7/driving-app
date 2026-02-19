@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import { ToastProvider } from "./context/ToastContext";
+import { AuthProvider } from "./context/AuthContext";
+import { SubscriptionProvider } from "./context/SubscriptionContext";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -17,14 +19,29 @@ import NotificationCenter from "./pages/NotificationCenter";
 import Resources from "./pages/Resources";
 import Tips from "./pages/Tips";
 import ImportantNotes from "./pages/ImportantNotes";
+import Calendar from "./pages/Calendar";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import StudentDashboard from "./pages/StudentDashboard";
+import PlayAndLearn from "./pages/PlayAndLearn";
+import SecondBefore from "./pages/SecondBefore";
+import PremiumProgress from "./pages/PremiumProgress";
+import HowItWorks from "./pages/HowItWorks";
+import PremiumGuard from "./components/PremiumGuard";
+import StudentCommunity from "./pages/StudentCommunity";
+import InstructorCommunity from "./pages/InstructorCommunity";
+import ExternalCommunities from "./pages/ExternalCommunities";
+import Subscribe from "./pages/Subscribe";
 
 import "./App.css";
 
 function App() {
   return (
     <Router>
-      <ToastProvider>
-        <Sidebar />
+      <AuthProvider>
+        <SubscriptionProvider>
+          <ToastProvider>
+            <Sidebar />
 
         <div style={{ marginLeft: "240px", padding: "20px" }}>
           <Routes>
@@ -49,9 +66,33 @@ function App() {
 
             {/* Notifications */}
             <Route path="/notifications" element={<NotificationCenter />} />
+
+            {/* Calendar */}
+            <Route path="/calendar" element={<Calendar />} />
+
+            {/* Auth */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/student-dashboard" element={<StudentDashboard />} />
+
+            {/* Premium - RoadMaster+ */}
+            <Route path="/premium/play-and-learn" element={<PremiumGuard feature="Play & Learn"><PlayAndLearn /></PremiumGuard>} />
+            <Route path="/premium/second-before" element={<PremiumGuard feature="Second Before"><SecondBefore /></PremiumGuard>} />
+            <Route path="/premium/progress" element={<PremiumGuard feature="Progress"><PremiumProgress /></PremiumGuard>} />
+            <Route path="/premium/how-it-works" element={<HowItWorks />} />
+
+            {/* Community */}
+            <Route path="/student-community" element={<StudentCommunity />} />
+            <Route path="/instructor-community" element={<InstructorCommunity />} />
+            <Route path="/external-communities" element={<ExternalCommunities />} />
+
+            {/* Subscription */}
+            <Route path="/subscribe" element={<Subscribe />} />
           </Routes>
-        </div>
-      </ToastProvider>
+          </div>
+        </ToastProvider>
+        </SubscriptionProvider>
+      </AuthProvider>
     </Router>
   );
 }
